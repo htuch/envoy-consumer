@@ -14,7 +14,7 @@ public:
   // NetworkFilterConfigFactory
   NetworkFilterFactoryCb tryCreateFilterFactory(NetworkFilterType type, const std::string& name,
                                                 const Json::Object&, Server::Instance&) {
-    if (type != NetworkFilterType::Read || name != "echo") {
+    if (type != NetworkFilterType::Read || name != "echo2") {
       return nullptr;
     }
 

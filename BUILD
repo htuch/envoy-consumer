@@ -1,13 +1,18 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@envoy//bazel:envoy_build_system.bzl", "envoy_cc_binary", "envoy_cc_library")
+load(
+    "@envoy//bazel:envoy_build_system.bzl",
+    "envoy_cc_binary",
+    "envoy_cc_library",
+    "envoy_cc_test_with_json",
+)
 
 envoy_cc_binary(
     name = "envoy",
     repository = "@envoy",
     deps = [
         ":echo2_config",
-        "@envoy//source/exe:envoy_main_lib"
+        "@envoy//source/exe:envoy_main_lib",
     ],
 )
 
@@ -15,6 +20,7 @@ envoy_cc_library(
     name = "echo2_lib",
     srcs = ["echo2.cc"],
     hdrs = ["echo2.h"],
+    repository = "@envoy",
     deps = [
         "@envoy//include/envoy/buffer:buffer_interface",
         "@envoy//include/envoy/network:connection_interface",
@@ -22,17 +28,27 @@ envoy_cc_library(
         "@envoy//source/common/common:assert_lib",
         "@envoy//source/common/common:logger_lib",
     ],
-    repository = "@envoy",
 )
 
 envoy_cc_library(
     name = "echo2_config",
     srcs = ["echo2_config.cc"],
+    repository = "@envoy",
     deps = [
         ":echo2_lib",
         "@envoy//include/envoy/network:connection_interface",
         "@envoy//source/server:configuration_lib",
     ],
     alwayslink = 1,
+)
+
+envoy_cc_test_with_json(
+    name = "echo2_integration_test",
+    srcs = ["echo2_integration_test.cc"],
+    jsons = ["echo2_server.json"],
     repository = "@envoy",
+    deps = [
+        ":echo2_config",
+        "@envoy//test/integration:integration_lib"
+    ],
 )
