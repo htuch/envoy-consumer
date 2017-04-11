@@ -4,7 +4,7 @@ load(
     "@envoy//bazel:envoy_build_system.bzl",
     "envoy_cc_binary",
     "envoy_cc_library",
-    "envoy_cc_test_with_json",
+    "envoy_cc_test",
 )
 
 envoy_cc_binary(
@@ -39,13 +39,12 @@ envoy_cc_library(
         "@envoy//include/envoy/network:connection_interface",
         "@envoy//source/server:configuration_lib",
     ],
-    alwayslink = 1,
 )
 
-envoy_cc_test_with_json(
+envoy_cc_test(
     name = "echo2_integration_test",
     srcs = ["echo2_integration_test.cc"],
-    jsons = ["echo2_server.json"],
+    data =  ["echo2_server.json"],
     repository = "@envoy",
     deps = [
         ":echo2_config",
